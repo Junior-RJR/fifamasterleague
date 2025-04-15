@@ -1,37 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --primary: #00c853;
+  --primary-dark: #009624;
+  --primary-light: #5efc82;
+  --secondary: #ff3d00;
+  --secondary-dark: #c30000;
+  --secondary-light: #ff7539;
+  --background: #0a0e17;
+  --surface: #111927;
+  --surface-light: #1a2332;
+  --text-primary: #ffffff;
+  --text-secondary: #b0bec5;
+  --text-muted: #78909c;
+  --border: #1e2a3a;
+  --gold: #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #000;
-  color: #fff;
+  font-family: "Poppins", sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
 }
 
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, rgba(10, 14, 23, 0.95) 0%, rgba(17, 25, 39, 0.95) 100%);
 }
 
 header {
-  background-color: #111;
-  padding: 1rem 2rem;
+  background: linear-gradient(to right, var(--surface), var(--surface-light));
+  padding: 1.2rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
 }
 
 header h1 {
   margin: 0;
-  color: #4caf50;
+  color: var(--primary);
   font-size: 1.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+}
+
+header h1::before {
+  content: "⚽";
+  margin-right: 10px;
+  font-size: 1.5rem;
 }
 
 main {
   flex: 1;
-  padding: 2rem;
+  padding: 2.5rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -40,68 +82,110 @@ main {
 
 .navigation {
   display: flex;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #333;
-  padding-bottom: 1rem;
+  margin-bottom: 2.5rem;
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .navigation button {
   background-color: transparent;
-  color: #ccc;
+  color: var(--text-secondary);
   border: none;
-  padding: 0.5rem 1rem;
-  margin-right: 1rem;
+  padding: 0.8rem 1.5rem;
+  margin-right: 0.5rem;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 4px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.navigation button::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
 }
 
 .navigation button:hover {
-  background-color: #222;
-  color: #fff;
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.navigation button:hover::after {
+  width: 80%;
 }
 
 .navigation button.active {
-  background-color: #4caf50;
-  color: #fff;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: var(--text-primary);
+  box-shadow: 0 4px 8px rgba(0, 200, 83, 0.3);
+}
+
+.navigation button.active::after {
+  width: 0;
 }
 
 .navigation .reset-btn {
   margin-left: auto;
-  background-color: #333;
-  color: #fff;
+  background: linear-gradient(135deg, #333, #444);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  transition: all 0.3s ease;
 }
 
 .navigation .reset-btn:hover {
-  background-color: #d32f2f;
+  background: linear-gradient(135deg, var(--secondary-dark), var(--secondary));
+  box-shadow: 0 4px 8px rgba(255, 61, 0, 0.3);
+  transform: translateY(-2px);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .user-info span {
-  color: #ccc;
+  color: var(--text-secondary);
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .logout-btn {
-  background-color: transparent;
-  color: #ccc;
-  border: 1px solid #333;
-  padding: 0.3rem 0.8rem;
-  border-radius: 4px;
+  background: linear-gradient(135deg, var(--surface), var(--surface-light));
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 0.8rem;
-  transition: all 0.2s;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
 }
 
 .logout-btn:hover {
-  background-color: #333;
-  color: #fff;
+  background: linear-gradient(135deg, var(--surface-light), var(--surface));
+  color: var(--text-primary);
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -120,6 +204,8 @@ main {
   .navigation button {
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 
   .navigation .reset-btn {
@@ -129,6 +215,21 @@ main {
   }
 
   main {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main > div {
+  animation: fadeIn 0.5s ease-out;
 }

@@ -1,102 +1,184 @@
 .player-input {
-    background-color: #111;
-    border-radius: 8px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--surface), var(--surface-light));
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.player-input h2 {
+  margin-top: 0;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.player-input h2::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--primary-light));
+  border-radius: 3px;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.form-group input {
+  width: 100%;
+  max-width: 120px;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+}
+
+.player-names {
+  margin-bottom: 2.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.player-names h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.player-name-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.player-name-input label {
+  width: 120px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.player-name-input input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.player-name-input input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+}
+
+.create-btn {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+  font-family: "Poppins", sans-serif;
+  display: block;
+  margin: 0 auto;
+}
+
+.create-btn:hover {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 200, 83, 0.4);
+}
+
+.create-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 200, 83, 0.3);
+}
+
+@media (max-width: 768px) {
+  .player-input {
+    padding: 1.5rem;
   }
-  
-  .player-input h2 {
-    margin-top: 0;
-    color: #4caf50;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #ccc;
-  }
-  
-  .form-group input {
-    width: 100%;
-    max-width: 100px;
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #333;
-    background-color: #222;
-    color: #fff;
-    font-size: 1rem;
-  }
-  
-  .player-names {
-    margin-bottom: 2rem;
-  }
-  
-  .player-names h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: #ccc;
-    font-size: 1.1rem;
-  }
-  
+
   .player-name-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.8rem;
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
+
   .player-name-input label {
-    width: 100px;
-    color: #ccc;
+    margin-bottom: 0.5rem;
+    width: 100%;
   }
-  
+
   .player-name-input input {
-    flex: 1;
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #333;
-    background-color: #222;
-    color: #fff;
-    font-size: 1rem;
+    width: 100%;
   }
-  
-  .create-btn {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .create-btn:hover {
-    background-color: #45a049;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  @media (max-width: 768px) {
-    .player-input {
-      padding: 1rem;
-    }
-  
-    .player-name-input {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .player-name-input label {
-      margin-bottom: 0.3rem;
-    }
-  
-    .player-name-input input {
-      width: 100%;
-    }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.4);
   }
-  
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 200, 83, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 200, 83, 0);
+  }
+}
+
+.create-btn {
+  animation: pulse 2s infinite;
+}

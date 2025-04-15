@@ -44,6 +44,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
   width: 300px;
+  border-left: 3px solid #d32f2f; 
 }
 
 .match-card:hover {
@@ -52,7 +53,7 @@
 }
 
 .match-card.played {
-  border-left: 3px solid #4caf50;
+  border-left: 3px solid #4caf50; 
 }
 
 .final-match {
@@ -101,6 +102,20 @@
   color: #666;
   margin-bottom: 1rem;
   font-style: italic;
+}
+
+.match-card.not-played .match-status {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.match-card.not-played .edit-btn {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.match-card.not-played .edit-btn:hover {
+  background-color: #b71c1c;
 }
 
 .edit-btn {

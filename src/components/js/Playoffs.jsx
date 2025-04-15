@@ -219,7 +219,7 @@ function Playoffs({ matches, onUpdateMatch, allMatchesPlayed, players, regularMa
               {semifinalMatches.map((match, idx) => {
                 const matchIndex = matches.findIndex((m) => m === match)
                 return (
-                  <div key={idx} className={`match-card ${match.played ? "played" : ""}`}>
+                  <div key={idx} className={`match-card ${match.played ? "played" : "not-played"}`}>
                     <div className="match-players">
                       <div className="player">{match.player1}</div>
                       <div className="vs">VS</div>
@@ -264,7 +264,7 @@ function Playoffs({ matches, onUpdateMatch, allMatchesPlayed, players, regularMa
             <h3>Disputa de 3º Lugar</h3>
             <div className="matches">
               {thirdPlaceMatch && thirdPlaceMatch.player1 && (
-                <div className={`match-card ${thirdPlaceMatch.played ? "played" : ""}`}>
+                <div className={`match-card ${thirdPlaceMatch.played ? "played" : "not-played"}`}>
                   <div className="match-players">
                     <div className="player">{thirdPlaceMatch.player1}</div>
                     <div className="vs">VS</div>
@@ -313,7 +313,7 @@ function Playoffs({ matches, onUpdateMatch, allMatchesPlayed, players, regularMa
             <h3>Final</h3>
             <div className="matches">
               {finalMatch && finalMatch.player1 && (
-                <div className={`match-card ${finalMatch.played ? "played" : ""} final-match`}>
+                <div className={`match-card ${finalMatch.played ? "played" : "not-played"} final-match`}>
                   <div className="match-players">
                     <div className="player">{finalMatch.player1}</div>
                     <div className="vs">VS</div>

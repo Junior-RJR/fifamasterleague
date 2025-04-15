@@ -126,7 +126,7 @@ function MatchList({ matches, onUpdateMatch, allMatchesPlayed, onStartPlayoffs, 
       ) : (
         <div className="matches">
           {matches.map((match, index) => (
-            <div key={index} className={`match-card ${match.played ? "played" : ""}`}>
+            <div key={index} className={`match-card ${match.played ? "played" : "not-played"}`}>
               <div className="match-header">Partida {index + 1}</div>
               <div className="match-players">
                 <div className="player">{match.player1}</div>
