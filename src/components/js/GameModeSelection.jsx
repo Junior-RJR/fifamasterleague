@@ -1,8 +1,10 @@
 import { useState } from "react"
 import "../css/GameModeSelection.css"
+import PasswordModal from "./PasswordModal"
 
 function GameModeSelection({ onSelectMode }) {
   const [selectedMode, setSelectedMode] = useState(null)
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
 
   const handleSelectMode = (mode) => {
     setSelectedMode(mode)
@@ -10,8 +12,17 @@ function GameModeSelection({ onSelectMode }) {
 
   const handleContinue = () => {
     if (selectedMode) {
-      onSelectMode(selectedMode)
+      setShowPasswordModal(true)
     }
+  }
+
+  const handlePasswordSuccess = () => {
+    setShowPasswordModal(false)
+    onSelectMode(selectedMode)
+  }
+
+  const handlePasswordCancel = () => {
+    setShowPasswordModal(false)
   }
 
   return (
@@ -48,6 +59,21 @@ function GameModeSelection({ onSelectMode }) {
           </ul>
           {selectedMode === "two-groups" && <div className="selected-check">✓</div>}
         </div>
+
+        {/* <div
+          className={`mode-card ${selectedMode === "knockout" ? "selected" : ""}`}
+          onClick={() => handleSelectMode("knockout")}
+        >
+          <div className="mode-icon">🎯</div>
+          <h3>Mata-Mata</h3>
+          <p>Eliminação direta em formato de chaves. Cada partida define quem avança.</p>
+          <ul>
+            <li>Sorteio das chaves</li>
+            <li>Formato de árvore/escadinha</li>
+            <li>Fase preliminar se número ímpar de jogadores</li>
+          </ul>
+          {selectedMode === "knockout" && <div className="selected-check">✓</div>}
+        </div> */}
       </div>
 
       <button
@@ -57,6 +83,8 @@ function GameModeSelection({ onSelectMode }) {
       >
         Continuar
       </button>
+
+      {showPasswordModal && <PasswordModal onClose={handlePasswordCancel} onSuccess={handlePasswordSuccess} />}
     </div>
   )
 }

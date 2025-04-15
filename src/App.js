@@ -8,16 +8,19 @@ import Login from "./components/js/Login"
 import Playoffs from "./components/js/Playoffs"
 import GameModeSelection from "./components/js/GameModeSelection"
 import GroupDraw from "./components/js/GroupDraw"
+import KnockoutDraw from "./components/js/KnockoutDraw"
+import WorldCupBracket from "./components/js/WorldCupBracket"
 
 function App() {
   const [players, setPlayers] = useState([])
   const [matches, setMatches] = useState([])
   const [playoffMatches, setPlayoffMatches] = useState([])
   const [user, setUser] = useState(null)
-  const [view, setView] = useState("mode-selection") 
+  const [view, setView] = useState("mode-selection")
   const [playoffsStarted, setPlayoffsStarted] = useState(false)
   const [gameMode, setGameMode] = useState(null) 
   const [groups, setGroups] = useState({ A: [], B: [] })
+  const [hasPreliminary, setHasPreliminary] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -30,10 +33,15 @@ function App() {
         setPlayoffsStarted(data.playoffsStarted || false)
         setGameMode(data.gameMode || null)
         setGroups(data.groups || { A: [], B: [] })
+        setHasPreliminary(data.hasPreliminary || false)
 
         if (data.players && data.players.length > 0) {
           if (data.gameMode) {
-            setView(data.playoffsStarted ? "playoffs" : "matches")
+            if (data.gameMode === "knockout") {
+              setView("knockout")
+            } else {
+              setView(data.playoffsStarted ? "playoffs" : "matches")
+            }
           } else {
             setView("mode-selection")
           }
@@ -53,10 +61,11 @@ function App() {
           playoffsStarted,
           gameMode,
           groups,
+          hasPreliminary,
         }),
       )
     }
-  }, [players, matches, playoffMatches, playoffsStarted, gameMode, groups, user])
+  }, [players, matches, playoffMatches, playoffsStarted, gameMode, groups, hasPreliminary, user])
 
   const generateAllVsAllMatches = (playerList) => {
     if (playerList.length < 2) return []
@@ -175,6 +184,8 @@ function App() {
       setView("matches")
     } else if (gameMode === "two-groups") {
       setView("group-draw")
+    } else if (gameMode === "knockout") {
+      setView("knockout-draw")
     }
   }
 
@@ -185,6 +196,12 @@ function App() {
     setView("matches")
   }
 
+  const handleKnockoutDrawComplete = (knockoutMatches, hasPreliminary) => {
+    setMatches(knockoutMatches)
+    setHasPreliminary(hasPreliminary)
+    setView("knockout")
+  }
+
   const handleUpdateMatch = (index, score1, score2) => {
     const updatedMatches = [...matches]
     updatedMatches[index] = {
@@ -193,6 +210,12 @@ function App() {
       score2,
       played: true,
     }
+    setMatches(updatedMatches)
+  }
+
+  const handleUpdateKnockoutMatch = (index, updatedMatch) => {
+    const updatedMatches = [...matches]
+    updatedMatches[index] = updatedMatch
     setMatches(updatedMatches)
   }
 
@@ -262,6 +285,7 @@ function App() {
     setPlayoffsStarted(false)
     setGameMode(null)
     setGroups({ A: [], B: [] })
+    setHasPreliminary(false)
     setView("mode-selection")
   }
 
@@ -273,6 +297,7 @@ function App() {
       setPlayoffsStarted(false)
       setGameMode(null)
       setGroups({ A: [], B: [] })
+      setHasPreliminary(false)
       setView("mode-selection")
       if (user) {
         localStorage.removeItem(`fifaLeague_${user}`)
@@ -305,20 +330,30 @@ function App() {
 
         {view === "group-draw" && <GroupDraw players={players} onDrawComplete={handleDrawComplete} />}
 
-        {view !== "mode-selection" && view !== "input" && view !== "group-draw" && (
+        {view === "knockout-draw" && <KnockoutDraw players={players} onDrawComplete={handleKnockoutDrawComplete} />}
+
+        {view !== "mode-selection" && view !== "input" && view !== "group-draw" && view !== "knockout-draw" && (
           <div className="navigation">
-            <button className={view === "matches" ? "active" : ""} onClick={() => setView("matches")}>
-              Partidas
-            </button>
-            <button
-              className={view === "table" || view === "group-tables" ? "active" : ""}
-              onClick={() => setView(gameMode === "two-groups" ? "group-tables" : "table")}
-            >
-              Tabela
-            </button>
-            <button className={view === "playoffs" ? "active" : ""} onClick={() => setView("playoffs")}>
-              Pódio
-            </button>
+            {gameMode !== "knockout" ? (
+              <>
+                <button className={view === "matches" ? "active" : ""} onClick={() => setView("matches")}>
+                  Partidas
+                </button>
+                <button
+                  className={view === "table" || view === "group-tables" ? "active" : ""}
+                  onClick={() => setView(gameMode === "two-groups" ? "group-tables" : "table")}
+                >
+                  Tabela
+                </button>
+                <button className={view === "playoffs" ? "active" : ""} onClick={() => setView("playoffs")}>
+                  Pódio
+                </button>
+              </>
+            ) : (
+              <button className={view === "knockout" ? "active" : ""} onClick={() => setView("knockout")}>
+                Chaveamento
+              </button>
+            )}
             <button onClick={handleReset} className="reset-btn">
               Reiniciar Torneio
             </button>
@@ -350,6 +385,8 @@ function App() {
             regularMatches={matches}
           />
         )}
+
+        {view === "knockout" && <WorldCupBracket matches={matches} onUpdateMatch={handleUpdateKnockoutMatch} />}
       </main>
     </div>
   )
