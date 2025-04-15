@@ -3,16 +3,21 @@ import "./App.css"
 import PlayerInput from "./components/js/PlayerInput"
 import MatchList from "./components/js/MatchList"
 import LeagueTable from "./components/js/LeagueTable"
+import GroupTables from "./components/js/GroupTables"
 import Login from "./components/js/Login"
 import Playoffs from "./components/js/Playoffs"
+import GameModeSelection from "./components/js/GameModeSelection"
+import GroupDraw from "./components/js/GroupDraw"
 
 function App() {
   const [players, setPlayers] = useState([])
   const [matches, setMatches] = useState([])
   const [playoffMatches, setPlayoffMatches] = useState([])
   const [user, setUser] = useState(null)
-  const [view, setView] = useState("input")
+  const [view, setView] = useState("mode-selection") 
   const [playoffsStarted, setPlayoffsStarted] = useState(false)
+  const [gameMode, setGameMode] = useState(null) 
+  const [groups, setGroups] = useState({ A: [], B: [] })
 
   useEffect(() => {
     if (user) {
@@ -23,8 +28,15 @@ function App() {
         setMatches(data.matches || [])
         setPlayoffMatches(data.playoffMatches || [])
         setPlayoffsStarted(data.playoffsStarted || false)
+        setGameMode(data.gameMode || null)
+        setGroups(data.groups || { A: [], B: [] })
+
         if (data.players && data.players.length > 0) {
-          setView(data.playoffsStarted ? "playoffs" : "matches")
+          if (data.gameMode) {
+            setView(data.playoffsStarted ? "playoffs" : "matches")
+          } else {
+            setView("mode-selection")
+          }
         }
       }
     }
@@ -39,12 +51,14 @@ function App() {
           matches,
           playoffMatches,
           playoffsStarted,
+          gameMode,
+          groups,
         }),
       )
     }
-  }, [players, matches, playoffMatches, playoffsStarted, user])
+  }, [players, matches, playoffMatches, playoffsStarted, gameMode, groups, user])
 
-  const generateMatches = (playerList) => {
+  const generateAllVsAllMatches = (playerList) => {
     if (playerList.length < 2) return []
 
     const newMatches = []
@@ -62,6 +76,40 @@ function App() {
     }
 
     return shuffleMatches(newMatches, playerList)
+  }
+
+  const generateTwoGroupsMatches = (groups) => {
+    if (!groups.A.length || !groups.B.length) return []
+
+    const newMatches = []
+
+    for (let i = 0; i < groups.A.length; i++) {
+      for (let j = i + 1; j < groups.A.length; j++) {
+        newMatches.push({
+          player1: groups.A[i],
+          player2: groups.A[j],
+          score1: null,
+          score2: null,
+          played: false,
+          group: "A",
+        })
+      }
+    }
+
+    for (let i = 0; i < groups.B.length; i++) {
+      for (let j = i + 1; j < groups.B.length; j++) {
+        newMatches.push({
+          player1: groups.B[i],
+          player2: groups.B[j],
+          score1: null,
+          score2: null,
+          played: false,
+          group: "B",
+        })
+      }
+    }
+
+    return shuffleMatches(newMatches, [...groups.A, ...groups.B])
   }
 
   const shuffleMatches = (matches, playerList) => {
@@ -113,9 +161,26 @@ function App() {
     return shuffled
   }
 
+  const handleSelectGameMode = (mode) => {
+    setGameMode(mode)
+    setView("input")
+  }
+
   const handleCreateTournament = (playerNames) => {
     setPlayers(playerNames)
-    const newMatches = generateMatches(playerNames)
+
+    if (gameMode === "all-vs-all") {
+      const newMatches = generateAllVsAllMatches(playerNames)
+      setMatches(newMatches)
+      setView("matches")
+    } else if (gameMode === "two-groups") {
+      setView("group-draw")
+    }
+  }
+
+  const handleDrawComplete = (drawnGroups) => {
+    setGroups(drawnGroups)
+    const newMatches = generateTwoGroupsMatches(drawnGroups)
     setMatches(newMatches)
     setView("matches")
   }
@@ -195,7 +260,9 @@ function App() {
     setMatches([])
     setPlayoffMatches([])
     setPlayoffsStarted(false)
-    setView("input")
+    setGameMode(null)
+    setGroups({ A: [], B: [] })
+    setView("mode-selection")
   }
 
   const handleReset = () => {
@@ -204,7 +271,9 @@ function App() {
       setMatches([])
       setPlayoffMatches([])
       setPlayoffsStarted(false)
-      setView("input")
+      setGameMode(null)
+      setGroups({ A: [], B: [] })
+      setView("mode-selection")
       if (user) {
         localStorage.removeItem(`fifaLeague_${user}`)
       }
@@ -230,14 +299,21 @@ function App() {
       </header>
 
       <main>
+        {view === "mode-selection" && <GameModeSelection onSelectMode={handleSelectGameMode} />}
+
         {view === "input" && <PlayerInput onCreateTournament={handleCreateTournament} />}
 
-        {view !== "input" && (
+        {view === "group-draw" && <GroupDraw players={players} onDrawComplete={handleDrawComplete} />}
+
+        {view !== "mode-selection" && view !== "input" && view !== "group-draw" && (
           <div className="navigation">
             <button className={view === "matches" ? "active" : ""} onClick={() => setView("matches")}>
               Partidas
             </button>
-            <button className={view === "table" ? "active" : ""} onClick={() => setView("table")}>
+            <button
+              className={view === "table" || view === "group-tables" ? "active" : ""}
+              onClick={() => setView(gameMode === "two-groups" ? "group-tables" : "table")}
+            >
               Tabela
             </button>
             <button className={view === "playoffs" ? "active" : ""} onClick={() => setView("playoffs")}>
@@ -256,10 +332,14 @@ function App() {
             allMatchesPlayed={allMatchesPlayed}
             onStartPlayoffs={handleStartPlayoffs}
             playoffsStarted={playoffsStarted}
+            gameMode={gameMode}
+            groups={groups}
           />
         )}
 
         {view === "table" && <LeagueTable players={players} matches={matches} />}
+
+        {view === "group-tables" && <GroupTables groups={groups} matches={matches} />}
 
         {view === "playoffs" && (
           <Playoffs
