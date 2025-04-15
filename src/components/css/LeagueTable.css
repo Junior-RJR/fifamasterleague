@@ -1,0 +1,121 @@
+.league-table {
+    background-color: #111;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .league-table h2 {
+    margin-top: 0;
+    color: #4caf50;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  
+  th,
+  td {
+    padding: 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid #333;
+  }
+  
+  th {
+    background-color: #222;
+    color: #ccc;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+  
+  th.player-name {
+    text-align: left;
+  }
+  
+  td.player-name {
+    text-align: left;
+    font-weight: bold;
+    position: relative;
+  }
+  
+  td.points {
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  tr.qualified td {
+    background-color: rgba(76, 175, 80, 0.1);
+  }
+  
+  .qualification-badge {
+    font-size: 0.7rem;
+    background-color: #4caf50;
+    color: white;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    margin-left: 0.5rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .no-data {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+  
+  .table-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    color: #666;
+    font-size: 0.8rem;
+  }
+  
+  .legend-item {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .league-table {
+      padding: 1rem;
+      overflow-x: auto;
+    }
+  
+    table {
+      font-size: 0.8rem;
+    }
+  
+    th,
+    td {
+      padding: 0.5rem 0.3rem;
+    }
+  
+    .table-legend {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  
+    .legend-item {
+      flex-wrap: wrap;
+    }
+  
+    .qualification-badge {
+      position: static;
+      transform: none;
+      display: block;
+      margin: 0.2rem 0 0 0;
+      width: fit-content;
+    }
+  }
+  

@@ -1,0 +1,237 @@
+.match-list {
+    background-color: #111;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .match-list h2 {
+    margin-top: 0;
+    color: #4caf50;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .progress-bar {
+    height: 20px;
+    background-color: #222;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .progress {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.3s ease;
+  }
+  
+  .progress-bar span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.8rem;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .matches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .match-card {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .match-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .match-card.played {
+    border-left: 3px solid #4caf50;
+  }
+  
+  .match-header {
+    background-color: #222;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  .match-players {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .player {
+    font-weight: bold;
+    color: #fff;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .vs {
+    margin: 0 1rem;
+    color: #666;
+    font-size: 0.8rem;
+  }
+  
+  .match-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid #333;
+  }
+  
+  .score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .match-status {
+    color: #666;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+  
+  .edit-btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .edit-btn:hover {
+    background-color: #444;
+  }
+  
+  .score-editor {
+    padding: 1rem;
+    border-top: 1px solid #333;
+  }
+  
+  .score-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .score-inputs input {
+    width: 60px;
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background-color: #222;
+    color: #fff;
+    font-size: 1rem;
+  }
+  
+  .score-inputs span {
+    margin: 0 0.5rem;
+    color: #ccc;
+  }
+  
+  .editor-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .editor-buttons button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .editor-buttons button:first-child {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .editor-buttons button:first-child:hover {
+    background-color: #45a049;
+  }
+  
+  .editor-buttons button:last-child {
+    background-color: #333;
+    color: #ccc;
+  }
+  
+  .editor-buttons button:last-child:hover {
+    background-color: #444;
+  }
+  
+  .no-matches {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+  
+  @media (max-width: 768px) {
+    .match-list {
+      padding: 1rem;
+    }
+  
+    .matches {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .playoffs-alert {
+    background-color: #1a1a1a;
+    border-left: 3px solid #4caf50;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+    text-align: center;
+  }
+  
+  .playoffs-alert p {
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  
+  .start-playoffs-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .start-playoffs-btn:hover {
+    background-color: #45a049;
+  }
+  
