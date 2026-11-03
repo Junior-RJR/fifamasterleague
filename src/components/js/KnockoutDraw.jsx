@@ -7,7 +7,7 @@ function KnockoutDraw({ players, onDrawComplete }) {
   const [drawnPlayers, setDrawnPlayers] = useState([])
   const [currentPlayer, setCurrentPlayer] = useState(null)
   const [currentPosition, setCurrentPosition] = useState(null)
-  const [drawComplete, setDrawComplete] = useState(false)
+  const [, setDrawComplete] = useState(false)
   const [hasPreliminary, setHasPreliminary] = useState(false)
   const [preliminaryScore1, setPreliminaryScore1] = useState("")
   const [preliminaryScore2, setPreliminaryScore2] = useState("")
@@ -24,6 +24,7 @@ function KnockoutDraw({ players, onDrawComplete }) {
       const shuffled = [...players].sort(() => Math.random() - 0.5)
       setRemainingPlayers(shuffled)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, players])
 
   useEffect(() => {

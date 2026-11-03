@@ -8,7 +8,7 @@ function GroupDraw({ players, onDrawComplete }) {
   const [groupB, setGroupB] = useState([])
   const [currentPlayer, setCurrentPlayer] = useState(null)
   const [currentGroup, setCurrentGroup] = useState(null)
-  const [drawComplete, setDrawComplete] = useState(false)
+  const [, setDrawComplete] = useState(false)
 
   const drumRef = useRef(null)
   const ballRef = useRef(null)
@@ -18,6 +18,7 @@ function GroupDraw({ players, onDrawComplete }) {
       const shuffled = [...players].sort(() => Math.random() - 0.5)
       setRemainingPlayers(shuffled)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, players])
 
   useEffect(() => {
