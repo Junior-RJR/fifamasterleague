@@ -175,3 +175,135 @@
     padding: 1.5rem;
   }
 }
+
+.team-draw-field input:disabled,
+.team-draw-field textarea:disabled {
+  opacity: 0.6;
+}
+
+.team-draw-players {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-draw-players-header {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.team-draw-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.team-draw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid rgba(0, 200, 83, 0.35);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  animation: teamCardIn 0.25s ease-out;
+}
+
+.team-draw-chip button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 0.3rem;
+}
+
+.team-draw-chip button:hover {
+  color: var(--secondary);
+}
+
+.team-draw-roulette {
+  margin: 2rem auto 0;
+  max-width: 420px;
+  text-align: center;
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.team-draw-roulette.landed {
+  border-style: solid;
+  border-color: var(--primary);
+  box-shadow: 0 0 24px rgba(0, 200, 83, 0.35);
+}
+
+.roulette-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.roulette-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.5rem 0;
+  min-height: 3rem;
+  word-break: break-word;
+}
+
+.team-draw-roulette.landed .roulette-name {
+  color: var(--primary);
+  animation: rouletteLand 0.4s ease-out;
+}
+
+.roulette-target {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gold);
+  min-height: 1.8rem;
+}
+
+.team-draw-done {
+  text-align: center;
+  color: var(--gold);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  animation: rouletteLand 0.4s ease-out;
+}
+
+.team-card {
+  transition: all 0.3s ease;
+}
+
+.team-card.target {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 200, 83, 0.35);
+  transform: translateY(-4px);
+}
+
+.team-card li.pending {
+  color: var(--text-muted);
+  text-align: center;
+  opacity: 0.5;
+}
+
+.team-card li.revealed {
+  animation: teamCardIn 0.4s ease-out;
+}
+
+@keyframes rouletteLand {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
