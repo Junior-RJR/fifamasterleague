@@ -1,0 +1,177 @@
+.team-draw {
+  background: linear-gradient(135deg, var(--surface), var(--surface-light));
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.5s ease-out;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
+
+.team-draw h2 {
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.team-draw-config {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.team-draw-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.team-draw-field label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.team-draw-field input,
+.team-draw-field textarea {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.team-draw-field textarea {
+  resize: vertical;
+}
+
+.team-draw-field input:focus,
+.team-draw-field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+}
+
+.team-draw-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.team-draw-btn {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+  transition: all 0.3s ease;
+  min-width: 160px;
+}
+
+.team-draw-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.team-draw-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.team-draw-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.team-draw-loading {
+  text-align: center;
+  font-size: 3rem;
+  margin-top: 1.5rem;
+  animation: teamDrawSpin 0.6s linear infinite;
+}
+
+.team-draw-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.team-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--primary);
+  border-radius: 12px;
+  padding: 1.2rem;
+  opacity: 0;
+  animation: teamCardIn 0.4s ease-out forwards;
+}
+
+.team-card h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.team-card ul {
+  list-style: none;
+}
+
+.team-card li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.team-card li:last-child {
+  border-bottom: none;
+}
+
+.extra-tag {
+  font-size: 0.7rem;
+  background: var(--secondary);
+  color: white;
+  padding: 0.1rem 0.5rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+}
+
+.empty-team {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@keyframes teamDrawSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes teamCardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .team-draw {
+    padding: 1.5rem;
+  }
+}
