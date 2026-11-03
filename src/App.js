@@ -10,6 +10,7 @@ import GameModeSelection from "./components/js/GameModeSelection"
 import GroupDraw from "./components/js/GroupDraw"
 import KnockoutDraw from "./components/js/KnockoutDraw"
 import WorldCupBracket from "./components/js/WorldCupBracket"
+import TeamDraw from "./components/js/TeamDraw"
 
 function App() {
   const [players, setPlayers] = useState([])
@@ -324,7 +325,12 @@ function App() {
       </header>
 
       <main>
-        {view === "mode-selection" && <GameModeSelection onSelectMode={handleSelectGameMode} />}
+        {view === "mode-selection" && (
+          <>
+            <TeamDraw />
+            <GameModeSelection onSelectMode={handleSelectGameMode} />
+          </>
+        )}
 
         {view === "input" && <PlayerInput onCreateTournament={handleCreateTournament} />}
 

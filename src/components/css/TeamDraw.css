@@ -1,0 +1,309 @@
+.team-draw {
+  background: linear-gradient(135deg, var(--surface), var(--surface-light));
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.5s ease-out;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
+
+.team-draw h2 {
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.team-draw-config {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.team-draw-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.team-draw-field label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.team-draw-field input,
+.team-draw-field textarea {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.team-draw-field textarea {
+  resize: vertical;
+}
+
+.team-draw-field input:focus,
+.team-draw-field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+}
+
+.team-draw-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.team-draw-btn {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+  transition: all 0.3s ease;
+  min-width: 160px;
+}
+
+.team-draw-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.team-draw-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.team-draw-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.team-draw-loading {
+  text-align: center;
+  font-size: 3rem;
+  margin-top: 1.5rem;
+  animation: teamDrawSpin 0.6s linear infinite;
+}
+
+.team-draw-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.team-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--primary);
+  border-radius: 12px;
+  padding: 1.2rem;
+  opacity: 0;
+  animation: teamCardIn 0.4s ease-out forwards;
+}
+
+.team-card h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.team-card ul {
+  list-style: none;
+}
+
+.team-card li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.team-card li:last-child {
+  border-bottom: none;
+}
+
+.extra-tag {
+  font-size: 0.7rem;
+  background: var(--secondary);
+  color: white;
+  padding: 0.1rem 0.5rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+}
+
+.empty-team {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@keyframes teamDrawSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes teamCardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .team-draw {
+    padding: 1.5rem;
+  }
+}
+
+.team-draw-field input:disabled,
+.team-draw-field textarea:disabled {
+  opacity: 0.6;
+}
+
+.team-draw-players {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-draw-players-header {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.team-draw-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.team-draw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid rgba(0, 200, 83, 0.35);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  animation: teamCardIn 0.25s ease-out;
+}
+
+.team-draw-chip button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 0.3rem;
+}
+
+.team-draw-chip button:hover {
+  color: var(--secondary);
+}
+
+.team-draw-roulette {
+  margin: 2rem auto 0;
+  max-width: 420px;
+  text-align: center;
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.team-draw-roulette.landed {
+  border-style: solid;
+  border-color: var(--primary);
+  box-shadow: 0 0 24px rgba(0, 200, 83, 0.35);
+}
+
+.roulette-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.roulette-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.5rem 0;
+  min-height: 3rem;
+  word-break: break-word;
+}
+
+.team-draw-roulette.landed .roulette-name {
+  color: var(--primary);
+  animation: rouletteLand 0.4s ease-out;
+}
+
+.roulette-target {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gold);
+  min-height: 1.8rem;
+}
+
+.team-draw-done {
+  text-align: center;
+  color: var(--gold);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  animation: rouletteLand 0.4s ease-out;
+}
+
+.team-card {
+  transition: all 0.3s ease;
+}
+
+.team-card.target {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 200, 83, 0.35);
+  transform: translateY(-4px);
+}
+
+.team-card li.pending {
+  color: var(--text-muted);
+  text-align: center;
+  opacity: 0.5;
+}
+
+.team-card li.revealed {
+  animation: teamCardIn 0.4s ease-out;
+}
+
+@keyframes rouletteLand {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
