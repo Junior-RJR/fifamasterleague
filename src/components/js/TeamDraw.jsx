@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react"
 import "../css/TeamDraw.css"
 
-// Jogadores que sempre ficam juntos no Time 2
-const FIXED_GROUP = ["junior", "lucas", "willian", "william", "wilian"]
-const FIXED_TEAM_INDEX = 1
+// Times definidos (usados quando o modo fixo está ligado), na ordem de revelação
+const PRESET_TEAMS = [
+  ["Willian", "Matheus Gomes", "Rogério Monteiro", "Thiago Aguilar", "Sidney", "Rodrigo", "Jefferson"],
+  ["Junior", "Lucas Santos", "Eneas Julio da Silva", "Henrique", "Felipe", "Robert Willian", "Gabriel"],
+  ["Lucas Aguilar", "Edenilton", "Tiago Sant Ana", "Gustavo", "Luciano", "Samuel", "Isaac"],
+]
 
-const SPIN_MS = 1500
-const HOLD_MS = 900
-
-// Separa uma lista colada (linhas, vírgulas, ponto e vírgula) e limpa numeração/marcadores
-const parseNames = (text) =>
-  text
-    .split(/[\n,;]+/)
-    .map((n) => n.replace(/^\s*(\d+\s*[.)\-:º°]?|[-–—•*·>])\s*/, "").trim())
-    .filter((n) => n !== "")
+const SPIN_MS = 1800
 
 const normalize = (name) =>
   name
@@ -21,6 +16,15 @@ const normalize = (name) =>
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+
+// Separa uma lista colada (linhas, vírgulas, ponto e vírgula) e limpa numeração/marcadores
+const parseNames = (text) =>
+  text
+    .split(/[\n,;]+/)
+    .map((n) => n.replace(/^\s*(\d+\s*[.)\-:º°]?|[-–—•*·>])\s*/, "").trim())
+    .filter((n) => n !== "")
 
 const shuffle = (list) => {
   const arr = [...list]
@@ -31,40 +35,55 @@ const shuffle = (list) => {
   return arr
 }
 
-const drawTeams = (names, teamCount, perTeam) => {
-  const fixed = names.filter((n) => FIXED_GROUP.includes(normalize(n)))
-  const others = shuffle(names.filter((n) => !FIXED_GROUP.includes(normalize(n))))
-
-  const teams = Array.from({ length: teamCount }, () => [])
-  const fixedIndex = Math.min(FIXED_TEAM_INDEX, teamCount - 1)
-  teams[fixedIndex].push(...fixed)
-
-  // Preenche os times definidos
+// Distribui uma lista nos times; o que sobrar vira time(s) extra(s)
+const fillTeams = (teams, rest, perTeam) => {
+  const queue = [...rest]
   for (const team of teams) {
-    while (team.length < perTeam && others.length > 0) {
-      team.push(others.shift())
-    }
+    while (team.length < perTeam && queue.length > 0) team.push(queue.shift())
   }
+  while (queue.length > 0) teams.push(queue.splice(0, perTeam))
+  return teams
+}
 
-  // O que sobrar vira time(s) extra(s)
-  while (others.length > 0) {
-    teams.push(others.splice(0, perTeam))
-  }
+const drawRandom = (names, teamCount, perTeam) =>
+  fillTeams(
+    Array.from({ length: teamCount }, () => []),
+    shuffle(names),
+    perTeam,
+  )
 
-  return teams.map((t) => shuffle(t))
+const drawPreset = (names, perTeam) => {
+  const byKey = new Map(names.map((n) => [normalize(n), n]))
+  const used = new Set()
+  const teams = PRESET_TEAMS.map((team) =>
+    team
+      .filter((p) => byKey.has(normalize(p)))
+      .map((p) => {
+        used.add(normalize(p))
+        return byKey.get(normalize(p))
+      }),
+  )
+  // Nomes digitados que não estão na lista entram aleatoriamente onde couber
+  const rest = shuffle(names.filter((n) => !used.has(normalize(n))))
+  return fillTeams(teams, rest, perTeam)
 }
 
 function TeamDraw() {
   const [players, setPlayers] = useState([])
   const [input, setInput] = useState("")
-  const [teamCount, setTeamCount] = useState(2)
-  const [perTeam, setPerTeam] = useState(3)
+  const [teamCount, setTeamCount] = useState(3)
+  const [perTeam, setPerTeam] = useState(7)
+  const [presetOn, setPresetOn] = useState(true)
   const [finalTeams, setFinalTeams] = useState([])
   const [sequence, setSequence] = useState([])
   const [step, setStep] = useState(0)
   const [rolling, setRolling] = useState(null)
-  const [landed, setLanded] = useState(false)
-  const [running, setRunning] = useState(false)
+  const [lastTeam, setLastTeam] = useState(null)
+  const [phase, setPhase] = useState("idle") // idle | spinning | landed
+
+  const active = sequence.length > 0
+  const finished = active && step >= sequence.length && phase !== "spinning"
+  const spinning = phase === "spinning"
 
   const addNames = (list) => {
     if (list.length === 0) return
@@ -106,31 +125,25 @@ function TeamDraw() {
     setPlayers((prev) => prev.filter((_, i) => i !== index))
   }
 
-  // Suspense: para cada nome, gira a roleta e depois revela
+  // Roleta: gira entre os nomes que faltam e para no próximo
   useEffect(() => {
-    if (!running) return
-    if (step >= sequence.length) {
-      setRunning(false)
-      setRolling(null)
-      return
-    }
+    if (phase !== "spinning") return
     const pool = sequence.slice(step).map((s) => s.name)
-    setLanded(false)
     const flicker = setInterval(() => {
       setRolling(pool[Math.floor(Math.random() * pool.length)])
     }, 80)
     const land = setTimeout(() => {
       clearInterval(flicker)
       setRolling(sequence[step].name)
-      setLanded(true)
+      setLastTeam(sequence[step].team)
+      setStep((s) => s + 1)
+      setPhase("landed")
     }, SPIN_MS)
-    const next = setTimeout(() => setStep((s) => s + 1), SPIN_MS + HOLD_MS)
     return () => {
       clearInterval(flicker)
       clearTimeout(land)
-      clearTimeout(next)
     }
-  }, [running, step, sequence])
+  }, [phase, step, sequence])
 
   const handleDraw = () => {
     const all = [...players]
@@ -144,7 +157,7 @@ function TeamDraw() {
       alert("Coloque pelo menos 2 nomes")
       return
     }
-    const teams = drawTeams(all, teamCount, perTeam)
+    const teams = presetOn ? drawPreset(all, perTeam) : drawRandom(all, teamCount, perTeam)
     // Revela alternando entre os times (1º do Time 1, 1º do Time 2, ...)
     const seq = []
     const maxSize = Math.max(...teams.map((t) => t.length))
@@ -157,31 +170,56 @@ function TeamDraw() {
     setSequence(seq)
     setStep(0)
     setRolling(null)
-    setRunning(true)
+    setLastTeam(null)
+    setPhase("idle")
   }
 
-  const handleSkip = () => {
-    setRunning(false)
+  const handleRevealNext = () => {
+    if (spinning || step >= sequence.length) return
+    setPhase("spinning")
+  }
+
+  const handleRevealAll = () => {
     setStep(sequence.length)
     setRolling(null)
+    setLastTeam(null)
+    setPhase("idle")
   }
 
   const handleClear = () => {
-    setRunning(false)
     setPlayers([])
     setInput("")
     setFinalTeams([])
     setSequence([])
     setStep(0)
     setRolling(null)
+    setLastTeam(null)
+    setPhase("idle")
+  }
+
+  const handleNewDraw = () => {
+    setFinalTeams([])
+    setSequence([])
+    setStep(0)
+    setRolling(null)
+    setLastTeam(null)
+    setPhase("idle")
   }
 
   const revealed = sequence.slice(0, step)
-  const current = running && step < sequence.length ? sequence[step] : null
-  const finished = finalTeams.length > 0 && !running && step >= sequence.length
+  const locked = active && !finished
+  const current = phase === "landed" ? sequence[step - 1] : null
 
   return (
     <div className="team-draw">
+      <button
+        type="button"
+        className={`team-draw-flag ${presetOn ? "on" : "off"}`}
+        onClick={() => setPresetOn((v) => !v)}
+        disabled={locked}
+        aria-label="opção"
+        title=""
+      />
       <h2>Sorteador de Times</h2>
 
       <div className="team-draw-config">
@@ -193,7 +231,7 @@ function TeamDraw() {
             min="1"
             max="20"
             value={teamCount}
-            disabled={running}
+            disabled={locked}
             onChange={(e) => setTeamCount(Math.max(1, Number.parseInt(e.target.value, 10) || 1))}
           />
         </div>
@@ -205,7 +243,7 @@ function TeamDraw() {
             min="1"
             max="20"
             value={perTeam}
-            disabled={running}
+            disabled={locked}
             onChange={(e) => setPerTeam(Math.max(1, Number.parseInt(e.target.value, 10) || 1))}
           />
         </div>
@@ -217,7 +255,7 @@ function TeamDraw() {
           id="names"
           rows="3"
           value={input}
-          disabled={running}
+          disabled={locked}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder={"Cole aqui a lista de nomes\n1. Fulano\n2. Ciclano"}
@@ -233,7 +271,7 @@ function TeamDraw() {
             {players.map((name, index) => (
               <span key={name + index} className="team-draw-chip">
                 {name}
-                {!running && (
+                {!locked && (
                   <button type="button" onClick={() => removePlayer(index)} aria-label={`Remover ${name}`}>
                     ×
                   </button>
@@ -244,45 +282,63 @@ function TeamDraw() {
         </div>
       )}
 
-      <div className="team-draw-actions">
-        {running ? (
-          <button className="team-draw-btn secondary" onClick={handleSkip}>
-            Pular suspense
+      {!active && (
+        <div className="team-draw-actions">
+          <button className="team-draw-btn" onClick={handleDraw}>
+            Sortear Times
           </button>
-        ) : (
-          <>
-            <button className="team-draw-btn" onClick={handleDraw}>
-              {finalTeams.length ? "Sortear de novo" : "Sortear Times"}
-            </button>
-            <button className="team-draw-btn secondary" onClick={handleClear}>
-              Limpar
-            </button>
-          </>
-        )}
-      </div>
-
-      {current && (
-        <div className={`team-draw-roulette ${landed ? "landed" : ""}`}>
-          <div className="roulette-label">
-            Sorteando {step + 1} de {sequence.length}
-          </div>
-          <div className="roulette-name">{rolling || "..."}</div>
-          <div className="roulette-target">{landed ? `➜ Time ${current.team + 1}` : "🎲"}</div>
+          <button className="team-draw-btn secondary" onClick={handleClear}>
+            Limpar
+          </button>
         </div>
       )}
 
-      {finished && <div className="team-draw-done">Times definidos! ⚽</div>}
+      {active && !finished && (
+        <>
+          <div className={`team-draw-roulette ${phase === "landed" ? "landed" : ""}`}>
+            <div className="roulette-label">
+              {phase === "idle" ? `${sequence.length} nomes no pote` : `Nome ${step + (spinning ? 1 : 0)} de ${sequence.length}`}
+            </div>
+            <div className="roulette-name">{rolling || "🎲"}</div>
+            <div className="roulette-target">
+              {phase === "landed" && current ? `➜ Time ${current.team + 1}` : spinning ? "sorteando..." : ""}
+            </div>
+          </div>
+          <div className="team-draw-actions">
+            <button className="team-draw-btn" onClick={handleRevealNext} disabled={spinning}>
+              {step === 0 && phase === "idle" ? "Revelar primeiro nome" : "Revelar próximo nome"}
+            </button>
+            <button className="team-draw-btn secondary" onClick={handleRevealAll} disabled={spinning}>
+              Revelar todos
+            </button>
+          </div>
+        </>
+      )}
+
+      {finished && (
+        <>
+          <div className="team-draw-done">Times definidos! ⚽</div>
+          <div className="team-draw-actions">
+            <button className="team-draw-btn" onClick={handleNewDraw}>
+              Novo sorteio
+            </button>
+            <button className="team-draw-btn secondary" onClick={handleClear}>
+              Limpar tudo
+            </button>
+          </div>
+        </>
+      )}
 
       {finalTeams.length > 0 && (
         <div className="team-draw-results">
           {finalTeams.map((team, t) => {
             const members = revealed.filter((r) => r.team === t).map((r) => r.name)
-            const isTarget = current && current.team === t && landed
+            const isTarget = phase === "landed" && lastTeam === t
             return (
               <div key={t} className={`team-card ${isTarget ? "target" : ""}`}>
                 <h3>
                   Time {t + 1}
-                  {t >= teamCount && <span className="extra-tag">extra</span>}
+                  {!presetOn && t >= teamCount && <span className="extra-tag">extra</span>}
                 </h3>
                 {team.length === 0 ? (
                   <p className="empty-team">Sem jogadores</p>

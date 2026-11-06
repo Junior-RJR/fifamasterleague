@@ -6,6 +6,30 @@
   animation: fadeIn 0.5s ease-out;
   max-width: 1000px;
   margin: 0 auto 2.5rem;
+  position: relative;
+}
+
+/* Chave discreta: cheio = lista fixa, vazio = aleatório */
+.team-draw-flag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.45;
+}
+
+.team-draw-flag.on {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.team-draw-flag:disabled {
+  cursor: default;
 }
 
 .team-draw h2 {
@@ -306,4 +330,9 @@
   0% { transform: scale(0.7); }
   60% { transform: scale(1.15); }
   100% { transform: scale(1); }
+}
+
+.team-draw-roulette + .team-draw-actions,
+.team-draw-done + .team-draw-actions {
+  margin-top: 1.2rem;
 }
