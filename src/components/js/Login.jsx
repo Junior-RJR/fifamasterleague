@@ -31,7 +31,7 @@ function Login({ onLogin }) {
         </form>
       ) : (
         <button onClick={() => setShowLogin(true)} className="login-btn">
-          Entrar para Salvar Dados
+          Entrar<span className="login-btn-extra"> para Salvar Dados</span>
         </button>
       )}
     </div>

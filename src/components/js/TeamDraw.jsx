@@ -68,6 +68,24 @@ const drawPreset = (names, perTeam) => {
   return fillTeams(teams, rest, perTeam)
 }
 
+function Stepper({ label, value, onChange, disabled }) {
+  const set = (v) => onChange(Math.min(20, Math.max(1, v)))
+  return (
+    <div className="team-draw-stepper">
+      <span className="stepper-label">{label}</span>
+      <div className="stepper-controls">
+        <button type="button" onClick={() => set(value - 1)} disabled={disabled || value <= 1} aria-label={`Diminuir ${label}`}>
+          −
+        </button>
+        <span className="stepper-value">{value}</span>
+        <button type="button" onClick={() => set(value + 1)} disabled={disabled || value >= 20} aria-label={`Aumentar ${label}`}>
+          +
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function TeamDraw() {
   const [players, setPlayers] = useState([])
   const [input, setInput] = useState("")
@@ -212,45 +230,32 @@ function TeamDraw() {
 
   return (
     <div className="team-draw">
-      <button
-        type="button"
-        className={`team-draw-flag ${presetOn ? "on" : "off"}`}
-        onClick={() => setPresetOn((v) => !v)}
-        disabled={locked}
-        aria-label="opção"
-        title=""
-      />
-      <h2>Sorteador de Times</h2>
+      <div className="team-draw-header">
+        <div className="team-draw-icon">🎲</div>
+        <div>
+          <h2>Sorteador de Times</h2>
+          <p className="team-draw-subtitle">Monte os times na hora</p>
+        </div>
+        <button
+          type="button"
+          className={`team-draw-flag ${presetOn ? "on" : "off"}`}
+          onClick={() => setPresetOn((v) => !v)}
+          disabled={locked}
+          aria-label="opção"
+        >
+          <span />
+        </button>
+      </div>
 
+      {!active && (
+        <>
       <div className="team-draw-config">
-        <div className="team-draw-field">
-          <label htmlFor="teamCount">Quantidade de times</label>
-          <input
-            id="teamCount"
-            type="number"
-            min="1"
-            max="20"
-            value={teamCount}
-            disabled={locked}
-            onChange={(e) => setTeamCount(Math.max(1, Number.parseInt(e.target.value, 10) || 1))}
-          />
-        </div>
-        <div className="team-draw-field">
-          <label htmlFor="perTeam">Pessoas por time</label>
-          <input
-            id="perTeam"
-            type="number"
-            min="1"
-            max="20"
-            value={perTeam}
-            disabled={locked}
-            onChange={(e) => setPerTeam(Math.max(1, Number.parseInt(e.target.value, 10) || 1))}
-          />
-        </div>
+        <Stepper label="Times" value={teamCount} onChange={setTeamCount} disabled={locked} />
+        <Stepper label="Por time" value={perTeam} onChange={setPerTeam} disabled={locked} />
       </div>
 
       <div className="team-draw-field">
-        <label htmlFor="names">Nomes — cole a lista ou digite e aperte Enter</label>
+        <label htmlFor="names">Jogadores</label>
         <textarea
           id="names"
           rows="3"
@@ -258,14 +263,16 @@ function TeamDraw() {
           disabled={locked}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          placeholder={"Cole aqui a lista de nomes\n1. Fulano\n2. Ciclano"}
+          placeholder={"Cole a lista ou digite um nome e aperte Enter"}
         />
       </div>
 
       {players.length > 0 && (
         <div className="team-draw-players">
           <div className="team-draw-players-header">
-            <span>{players.length} jogador(es)</span>
+            <span>
+              <strong>{players.length}</strong> {players.length === 1 ? "jogador" : "jogadores"}
+            </span>
           </div>
           <div className="team-draw-chips">
             {players.map((name, index) => (
@@ -282,12 +289,15 @@ function TeamDraw() {
         </div>
       )}
 
+        </>
+      )}
+
       {!active && (
         <div className="team-draw-actions">
           <button className="team-draw-btn" onClick={handleDraw}>
             Sortear Times
           </button>
-          <button className="team-draw-btn secondary" onClick={handleClear}>
+          <button className="team-draw-link" onClick={handleClear}>
             Limpar
           </button>
         </div>
@@ -308,7 +318,7 @@ function TeamDraw() {
             <button className="team-draw-btn" onClick={handleRevealNext} disabled={spinning}>
               {step === 0 && phase === "idle" ? "Revelar primeiro nome" : "Revelar próximo nome"}
             </button>
-            <button className="team-draw-btn secondary" onClick={handleRevealAll} disabled={spinning}>
+            <button className="team-draw-link" onClick={handleRevealAll} disabled={spinning}>
               Revelar todos
             </button>
           </div>
@@ -322,7 +332,7 @@ function TeamDraw() {
             <button className="team-draw-btn" onClick={handleNewDraw}>
               Novo sorteio
             </button>
-            <button className="team-draw-btn secondary" onClick={handleClear}>
+            <button className="team-draw-link" onClick={handleClear}>
               Limpar tudo
             </button>
           </div>
@@ -337,8 +347,13 @@ function TeamDraw() {
             return (
               <div key={t} className={`team-card ${isTarget ? "target" : ""}`}>
                 <h3>
-                  Time {t + 1}
-                  {!presetOn && t >= teamCount && <span className="extra-tag">extra</span>}
+                  <span>
+                    Time {t + 1}
+                    {!presetOn && t >= teamCount && <span className="extra-tag">extra</span>}
+                  </span>
+                  <span className="team-count">
+                    {members.length}/{team.length}
+                  </span>
                 </h3>
                 {team.length === 0 ? (
                   <p className="empty-team">Sem jogadores</p>
@@ -347,11 +362,13 @@ function TeamDraw() {
                     {team.map((_, i) =>
                       i < members.length ? (
                         <li key={i} className="revealed">
+                          <span className="slot-num">{i + 1}</span>
                           {members[i]}
                         </li>
                       ) : (
                         <li key={i} className="pending">
-                          ?
+                          <span className="slot-num">{i + 1}</span>
+                          <span className="slot-empty" />
                         </li>
                       ),
                     )}

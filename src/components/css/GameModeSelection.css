@@ -162,7 +162,31 @@
 
 @media (max-width: 768px) {
   .game-mode-selection {
-    padding: 1.5rem;
+    padding: 1.25rem 1rem;
+    border-radius: 18px;
+  }
+
+  .game-mode-selection h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mode-cards {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mode-card {
+    padding: 1.25rem;
+  }
+
+  .mode-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .mode-card h3 {
+    font-size: 1.2rem;
   }
 
   .mode-cards {

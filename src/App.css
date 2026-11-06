@@ -190,10 +190,37 @@ main {
 
 @media (max-width: 768px) {
   header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+
+  header h1 {
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  header .login-btn-extra {
+    display: none;
+  }
+
+  header h1::before {
+    font-size: 1.1rem;
+    margin-right: 6px;
+  }
+
+  header .login-container {
+    width: auto;
+  }
+
+  header .login-btn {
+    width: auto;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 50px;
   }
 
   .navigation {
@@ -215,7 +242,7 @@ main {
   }
 
   main {
-    padding: 1.5rem 1rem;
+    padding: 1rem 0.75rem;
   }
 }
 

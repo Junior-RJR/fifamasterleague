@@ -1,287 +1,325 @@
 .team-draw {
-  background: linear-gradient(135deg, var(--surface), var(--surface-light));
-  border-radius: 16px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.5s ease-out;
-  max-width: 1000px;
-  margin: 0 auto 2.5rem;
   position: relative;
+  max-width: 1000px;
+  margin: 0 auto 2rem;
+  padding: 1.75rem 2rem 2rem;
+  border-radius: 20px;
+  background: linear-gradient(160deg, var(--surface-light) 0%, var(--surface) 60%);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.5s ease-out;
 }
 
-/* Chave discreta: cheio = lista fixa, vazio = aleatório */
+/* Cabeçalho */
+.team-draw-header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+  padding-right: 2rem;
+}
+
+.team-draw-icon {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  border-radius: 14px;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid rgba(0, 200, 83, 0.3);
+}
+
+.team-draw h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.team-draw-subtitle {
+  margin: 0.15rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Chave discreta: área de toque grande, ponto pequeno. Cheio = lista fixa, vazio = aleatório */
 .team-draw-flag {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 9px;
-  height: 9px;
+  top: 6px;
+  right: 6px;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: none;
   background: transparent;
   cursor: pointer;
-  opacity: 0.45;
+  display: grid;
+  place-items: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.team-draw-flag.on {
-  background: rgba(255, 255, 255, 0.25);
+.team-draw-flag span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.team-draw-flag.on span {
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .team-draw-flag:disabled {
   cursor: default;
 }
 
-.team-draw h2 {
-  color: var(--primary);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
-  font-size: 1.6rem;
+/* Contadores */
+.team-draw-config {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.team-draw-stepper {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.7rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stepper-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stepper-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepper-controls button {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stepper-controls button:active:not(:disabled) {
+  background: rgba(0, 200, 83, 0.25);
+}
+
+.stepper-controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.stepper-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 2ch;
   text-align: center;
 }
 
-.team-draw-config {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
+/* Campo de nomes */
 .team-draw-field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.2rem;
-  flex: 1;
-  min-width: 160px;
+  margin-bottom: 1rem;
 }
 
 .team-draw-field label {
-  color: var(--text-secondary);
-  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
 }
 
-.team-draw-field input,
 .team-draw-field textarea {
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
   border: 1px solid var(--border);
-  background-color: var(--surface);
+  background: var(--background);
   color: var(--text-primary);
   font-size: 1rem;
   font-family: "Poppins", sans-serif;
-  transition: all 0.3s ease;
+  resize: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.team-draw-field textarea {
-  resize: vertical;
+.team-draw-field textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
 }
 
-.team-draw-field input:focus,
 .team-draw-field textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.18);
 }
 
-.team-draw-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.team-draw-btn {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  color: white;
-  border: none;
-  padding: 0.9rem 2rem;
-  border-radius: 50px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
-  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
-  transition: all 0.3s ease;
-  min-width: 160px;
-}
-
-.team-draw-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-}
-
-.team-draw-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.team-draw-btn.secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  box-shadow: none;
-}
-
-.team-draw-loading {
-  text-align: center;
-  font-size: 3rem;
-  margin-top: 1.5rem;
-  animation: teamDrawSpin 0.6s linear infinite;
-}
-
-.team-draw-results {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.2rem;
-  margin-top: 2rem;
-}
-
-.team-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--primary);
-  border-radius: 12px;
-  padding: 1.2rem;
-  opacity: 0;
-  animation: teamCardIn 0.4s ease-out forwards;
-}
-
-.team-card h3 {
-  color: var(--primary);
-  font-size: 1.2rem;
-  margin-bottom: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.team-card ul {
-  list-style: none;
-}
-
-.team-card li {
-  padding: 0.4rem 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-primary);
-}
-
-.team-card li:last-child {
-  border-bottom: none;
-}
-
-.extra-tag {
-  font-size: 0.7rem;
-  background: var(--secondary);
-  color: white;
-  padding: 0.1rem 0.5rem;
-  border-radius: 50px;
-  text-transform: uppercase;
-}
-
-.empty-team {
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-@keyframes teamDrawSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes teamCardIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-  .team-draw {
-    padding: 1.5rem;
-  }
-}
-
-.team-draw-field input:disabled,
 .team-draw-field textarea:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
+/* Lista de jogadores */
 .team-draw-players {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .team-draw-players-header {
   color: var(--text-secondary);
-  font-weight: 500;
-  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+.team-draw-players-header strong {
+  color: var(--primary);
+  font-size: 1rem;
 }
 
 .team-draw-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .team-draw-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: rgba(0, 200, 83, 0.12);
-  border: 1px solid rgba(0, 200, 83, 0.35);
+  gap: 0.15rem;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
   color: var(--text-primary);
-  padding: 0.3rem 0.5rem 0.3rem 0.8rem;
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
   border-radius: 50px;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   animation: teamCardIn 0.25s ease-out;
 }
 
 .team-draw-chip button {
-  background: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   border: none;
-  color: var(--text-secondary);
+  background: transparent;
+  color: var(--text-muted);
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1;
-  padding: 0 0.3rem;
+  padding: 0;
 }
 
 .team-draw-chip button:hover {
   color: var(--secondary);
 }
 
+/* Botões */
+.team-draw-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.team-draw-btn {
+  width: 100%;
+  max-width: 360px;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 200, 83, 0.3);
+  transition: transform 0.15s ease, opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.team-draw-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.team-draw-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.team-draw-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}
+
+.team-draw-link:hover:not(:disabled) {
+  color: var(--text-secondary);
+}
+
+.team-draw-link:disabled {
+  opacity: 0.4;
+}
+
+/* Roleta */
 .team-draw-roulette {
-  margin: 2rem auto 0;
+  margin: 0.5rem auto 1rem;
   max-width: 420px;
   text-align: center;
-  background: var(--surface);
-  border: 2px dashed var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.25rem 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .team-draw-roulette.landed {
-  border-style: solid;
   border-color: var(--primary);
-  box-shadow: 0 0 24px rgba(0, 200, 83, 0.35);
+  box-shadow: 0 0 28px rgba(0, 200, 83, 0.3);
 }
 
 .roulette-label {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
 }
 
 .roulette-name {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0.5rem 0;
-  min-height: 3rem;
+  margin: 0.4rem 0;
+  min-height: 2.8rem;
+  line-height: 1.3;
   word-break: break-word;
 }
 
@@ -291,48 +329,180 @@
 }
 
 .roulette-target {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--gold);
-  min-height: 1.8rem;
+  display: inline-block;
+  min-height: 1.9rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.team-draw-roulette.landed .roulette-target {
+  color: var(--background);
+  background: var(--gold);
+  padding: 0.2rem 0.9rem;
+  border-radius: 50px;
+  animation: rouletteLand 0.4s ease-out;
 }
 
 .team-draw-done {
   text-align: center;
   color: var(--gold);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-top: 1.5rem;
+  margin: 0.5rem 0 0.75rem;
   animation: rouletteLand 0.4s ease-out;
 }
 
+/* Times */
+.team-draw-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
 .team-card {
-  transition: all 0.3s ease;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  animation: teamCardIn 0.4s ease-out;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .team-card.target {
   border-color: var(--primary);
-  box-shadow: 0 0 20px rgba(0, 200, 83, 0.35);
-  transform: translateY(-4px);
+  box-shadow: 0 0 22px rgba(0, 200, 83, 0.3);
+  transform: translateY(-3px);
 }
 
-.team-card li.pending {
+.team-card h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.team-card h3 > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.team-count {
   color: var(--text-muted);
-  text-align: center;
-  opacity: 0.5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--surface-light);
+  padding: 0.1rem 0.55rem;
+  border-radius: 50px;
+}
+
+.team-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.team-card li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.team-card li:last-child {
+  border-bottom: none;
+}
+
+.slot-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--surface-light);
 }
 
 .team-card li.revealed {
   animation: teamCardIn 0.4s ease-out;
 }
 
+.team-card li.revealed .slot-num {
+  color: var(--background);
+  background: var(--primary);
+}
+
+.slot-empty {
+  flex: 1;
+  height: 10px;
+  border-radius: 6px;
+  background: var(--surface-light);
+  opacity: 0.6;
+}
+
+.extra-tag {
+  font-size: 0.65rem;
+  background: var(--secondary);
+  color: white;
+  padding: 0.1rem 0.45rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+}
+
+.empty-team {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@keyframes teamCardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes rouletteLand {
   0% { transform: scale(0.7); }
-  60% { transform: scale(1.15); }
+  60% { transform: scale(1.12); }
   100% { transform: scale(1); }
 }
 
-.team-draw-roulette + .team-draw-actions,
-.team-draw-done + .team-draw-actions {
-  margin-top: 1.2rem;
+/* Celular */
+@media (max-width: 600px) {
+  .team-draw {
+    padding: 1.25rem 1rem 1.25rem;
+    border-radius: 18px;
+    margin-bottom: 1.5rem;
+  }
+
+  .team-draw-header {
+    margin-bottom: 1.1rem;
+  }
+
+  .team-draw-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.3rem;
+  }
+
+  .team-draw h2 {
+    font-size: 1.2rem;
+  }
+
+  .roulette-name {
+    font-size: 1.7rem;
+  }
+
+  .team-draw-results {
+    grid-template-columns: 1fr;
+  }
 }
