@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
 import "../css/TeamDraw.css"
 
-// Times definidos (usados quando o modo fixo está ligado), na ordem de revelação
+// Times definidos (usados quando a bolinha está cheia)
 const PRESET_TEAMS = [
   ["Willian", "Matheus Gomes", "Rogério Monteiro", "Thiago Aguilar", "Sidney", "Rodrigo", "Jefferson"],
-  ["Junior", "Lucas Santos", "Eneas Julio da Silva", "Henrique", "Felipe", "Robert Willian", "Gabriel"],
-  ["Lucas Aguilar", "Edenilton", "Tiago Sant Ana", "Gustavo", "Luciano", "Samuel", "Isaac"],
+  ["Junior", "Lucas Santos", "Eneas Julio da Silva", "Henrique", "Felipe", "Robert Willian", "Isaac"],
+  ["Lucas Aguilar", "Edenilton", "Tiago Sant Ana", "Gustavo", "Luciano", "Samuel", "Gabriel"],
 ]
+
+// Regras do sorteio aleatório (bolinha vazia)
+const TOGETHER = ["junior", "lucas santos"] // sempre no mesmo time
+const APART = ["willian", "william"] // sempre em time diferente do par acima
 
 const SPIN_MS = 1800
 
@@ -45,12 +49,22 @@ const fillTeams = (teams, rest, perTeam) => {
   return teams
 }
 
-const drawRandom = (names, teamCount, perTeam) =>
-  fillTeams(
-    Array.from({ length: teamCount }, () => []),
-    shuffle(names),
-    perTeam,
-  )
+const drawRandom = (names, teamCount, perTeam) => {
+  const teams = Array.from({ length: teamCount }, () => [])
+  const together = names.filter((n) => TOGETHER.includes(normalize(n)))
+  const apart = names.filter((n) => APART.includes(normalize(n)))
+  const rest = shuffle(names.filter((n) => !together.includes(n) && !apart.includes(n)))
+
+  const order = shuffle(teams.map((_, i) => i))
+  const pairTeam = order[0]
+  if (together.length) teams[pairTeam].push(...together)
+  if (apart.length) {
+    // Time diferente do par (se só existir 1 time, não tem como separar)
+    const other = together.length && teamCount > 1 ? order[1] : order[0]
+    teams[other].push(...apart)
+  }
+  return fillTeams(teams, rest, perTeam).map((t) => shuffle(t))
+}
 
 const drawPreset = (names, perTeam) => {
   const byKey = new Map(names.map((n) => [normalize(n), n]))
@@ -63,9 +77,21 @@ const drawPreset = (names, perTeam) => {
         return byKey.get(normalize(p))
       }),
   )
-  // Nomes digitados que não estão na lista entram aleatoriamente onde couber
+  // Quem não está na lista entra aleatoriamente nas vagas de quem faltou
   const rest = shuffle(names.filter((n) => !used.has(normalize(n))))
-  return fillTeams(teams, rest, perTeam)
+  fillTeams(teams, rest, perTeam)
+
+  // Se ainda faltar gente no Time 1 ou 2, puxa alguém aleatório do Time 3
+  const last = teams[PRESET_TEAMS.length - 1]
+  for (let t = 0; t < PRESET_TEAMS.length - 1; t++) {
+    while (teams[t].length < perTeam && last.length > teams[t].length) {
+      const i = Math.floor(Math.random() * last.length)
+      teams[t].push(last.splice(i, 1)[0])
+    }
+  }
+
+  // Embaralha a ordem dentro de cada time (os times continuam os mesmos)
+  return teams.map((t) => shuffle(t))
 }
 
 function Stepper({ label, value, onChange, disabled }) {
